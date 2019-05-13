@@ -1,2 +1,3 @@
 // Implementation file of Machine class
-//hello world
+
+#include "Machine.h"
