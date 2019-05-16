@@ -15,8 +15,8 @@ private:
     Item *pItem;
 
 public:
-    Inventory(int size = 0, Item *ptr = nullptr); // Item *ptr can pass an array
-                                                  // of Item objects
+    Inventory();
+    Inventory(const Item [], int size);
     Inventory(const Inventory &);
     ~Inventory();
     void addItem(const Item &);

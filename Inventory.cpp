@@ -1,6 +1,12 @@
 #include "Inventory.h"
 
-Inventory::Inventory(int size, Item *ptr)
+Inventory::Inventory()
+{
+    size = 0;
+    pItem = nullptr;
+}
+
+Inventory::Inventory(const Item a[], int size)
 {
     if (size <= 0)
     {
@@ -9,22 +15,25 @@ Inventory::Inventory(int size, Item *ptr)
     }
     else
     {
-        if (ptr == nullptr)
-        {
-            this->size = size;
-            pItem = nullptr;
-        }
-        else
-        {
-            this->size = size;
-            pItem = new Item[size];
-            for (int i = 0; i < size; i++)
-                pItem[i] = ptr[i];
-        }
+        this->size = size;
+        pItem = new Item[size];
+        for (int i = 0; i < size; i++)
+            pItem[i] = a[i];
     }
 }
 
-Inventory::Inventory(const Inventory &a) : Inventory(a.size, a.pItem) {}
+Inventory::Inventory(const Inventory &a)
+{
+	if (size != a.size)
+	{
+		size = a.size;
+		if (pItem != nullptr)
+			delete[] pItem;
+		pItem = new Item[size];
+	}
+	for (int i = 0; i < size; i++)
+		pItem[i] = a.pItem[i];
+}
 
 Inventory::~Inventory()
 {
