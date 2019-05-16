@@ -4,15 +4,15 @@
 
 Item::Item(int id, int qty, int price, const string &desc)
 {
-    this.id = id;
+    this->id = id;
     if (qty >= 0)
         quantity = qty;
     else
         quantity = 0;
     if (price >= 0)
-        this.price = price;
+        this->price = price;
     else
-        this.price = 0;
+        this->price = 0;
     description = desc;
 }
 
