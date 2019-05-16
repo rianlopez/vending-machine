@@ -2,35 +2,50 @@
 
 #include "Item.h"
 
-Item::Item(int i, const string &d, int p)
+Item::Item(int id, int qty, int price, const string &desc)
 {
-    id = i;
-    description = d;
-    if (p >= 0)
-        price = p;
+    this.id = id;
+    if (qty >= 0)
+        quantity = qty;
     else
-        price = 0;
+        quantity = 0;
+    if (price >= 0)
+        this.price = price;
+    else
+        this.price = 0;
+    description = desc;
 }
 
-void Item::setId(int i)
+void Item::setId(int a)
 {
-    id = i;
+    id = a;
 }
 
-void Item::setPrice(int p)
+void Item::setQuantity(int a)
 {
-    if (p >= 0)
-        price = p;
+    if (a >= 0)
+        quantity = a;
 }
 
-void Item::setDescription(const string &d)
+void Item::setPrice(int a)
 {
-    description = d;
+    if (a >= 0)
+        price = a;
+}
+
+void Item::setDescription(const string &a)
+{
+    description = a;
 }
 
 int Item::getId() const
 {
     return id;
+}
+
+int Item::getQuantity() const
+{
+    return quantity;
 }
 
 int Item::getPrice() const
