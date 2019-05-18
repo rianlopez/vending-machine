@@ -33,8 +33,6 @@ int main()
 	cout << "size of inv2: " << inv2.getSize() << endl;
 	for (int i = 0; i < inv2.getSize(); i++)
 		cout << inv2[i].getId() << endl;
-	// uncomment to test array bounds
-	// inv2[2].getId();
 
 	Inventory inv3;
 	inv3 = inv1;
