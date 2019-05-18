@@ -136,3 +136,13 @@ Item &Inventory::operator[](int index)
     }
     return pItem[index];
 }
+
+const Item &Inventory::operator[](int index) const
+{
+	if (index < 0 || index >= size)
+	{
+		cout << "Error: Array index is out of bounds, exiting" << endl;
+		exit(0);
+	}
+	return pItem[index];
+}

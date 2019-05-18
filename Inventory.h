@@ -26,6 +26,7 @@ public:
     int search(const Item &) const;
     Inventory &operator=(const Inventory &);
     Item &operator[](int index);
+    const Item &operator[](int index) const;
 
 };
 
