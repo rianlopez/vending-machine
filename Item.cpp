@@ -4,16 +4,14 @@
 
 Item::Item(int id, int qty, int price, const string &desc)
 {
+	if (qty < 0)
+		qty = 0;
+	if (price < 0)
+		price = 0;
     this->id = id;
-    if (qty >= 0)
-        quantity = qty;
-    else
-        quantity = 0;
-    if (price >= 0)
-        this->price = price;
-    else
-        this->price = 0;
-    description = desc;
+	quantity = qty;
+	this->price = price;
+	description = desc;
 }
 
 void Item::setId(int a)
