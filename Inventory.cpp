@@ -8,26 +8,29 @@ Inventory::Inventory()
 
 Inventory::Inventory(const Item a[], int size)
 {
-    if (size <= 0)
-    {
-        this->size = 0;
-        pItem = nullptr;
-    }
-    else
-    {
-        this->size = size;
-        pItem = new Item[size];
-        for (int i = 0; i < size; i++)
-            pItem[i] = a[i];
-    }
+	if (size <= 0)
+	{
+		this->size = 0;
+		pItem = nullptr;
+	}
+	else
+	{
+		this->size = size;
+		pItem = new Item[size];
+
+		for (int i = 0; i < size; i++)
+			pItem[i] = a[i];
+	}
 }
 
 Inventory::Inventory(const Inventory &a)
 {
 	size = a.size;
+
 	if (size > 0)
 	{
 		pItem = new Item[size];
+
 		for (int i = 0; i < size; i++)
 			pItem[i] = a.pItem[i];
 	}
@@ -41,82 +44,105 @@ Inventory::~Inventory()
     pItem = nullptr;
 }
 
-void Inventory::addItem(const Item &a)
+void Inventory::addItem(int id, int qty, int price, std::string desc)
 {
     Item *temp = new Item[size + 1];
+
     for (int i = 0; i < size; i++)
         temp[i] = pItem[i];
-    temp[size] = a;
+
+	if (qty < 0)
+		qty = 0;
+	if (price < 0)
+		price = 0;
+
+	temp[size].id = id;
+	temp[size].initQty = temp[size].qty = qty;
+	temp[size].price = price;
+	temp[size].desc = desc;
+
     size++;
+
 	if (pItem != nullptr)
 		delete[] pItem;
+
     pItem = temp;
 }
 
-void Inventory::removeItem(int index)
+void Inventory::addItem(const Item &a)
 {
-	if (index >= 0 && index < size)
-	{
-		if (size - 1 > 0)
-		{
-			if (index != size - 1)
-			{
-				for (int i = index; i < size - 1; i++)
-					pItem[i] = pItem[i + 1];
-			}
-			Item *temp = new Item[--size];
-			for (int i = 0; i < size; i++)
-				temp[i] = pItem[i];
-			delete[] pItem;
-			pItem = temp;
-		}
-		else
-		{
-			size = 0;
-			delete[] pItem;
-			pItem = nullptr;
-		}
-	}
+	Item *temp = new Item[size + 1];
+
+	for (int i = 0; i < size; i++)
+		temp[i] = pItem[i];
+
+	temp[size] = a;
+	size++;
+
+	if (pItem != nullptr)
+		delete[] pItem;
+
+	pItem = temp;
 }
 
-void Inventory::setItemList(const Item a[], int size)
+bool Inventory::setItemList(const Item a[], int size)
 {
-    if (size > 0)
-    {
-        if (this->size != size)
-        {
-            this->size = size;
+	bool valid = true;
+
+	if (size > 0)
+	{
+		if (this->size != size)
+		{
+			this->size = size;
+
 			if (pItem != nullptr)
 				delete[] pItem;
-            pItem = new Item[size];
-        }
-        for (int i = 0; i < size; i++)
-            pItem[i] = a[i];
-    }
+
+			pItem = new Item[size];
+		}
+
+		for (int i = 0; i < size; i++)
+			pItem[i] = a[i];
+	}
+	else
+		valid = false;
+
+	return valid;
 }
 
-int Inventory::getSize() const
+int Inventory::getItem(int id, int qty)
 {
-    return size;
-}
+	int quantity = 0;
 
-int Inventory::search(const Item &a) const
-{
-    int i = 0;
-    int pos = -1;
-    int key = a.getId();
-    bool found = false;
-    while (!found && i < size)
-    {
-        if (pItem[i].getId() == key)
-        {
-            pos = i;
-            found = true;
-        }
-        else
-            i++;
-    }
-    return pos;
+	if (qty > 0)
+	{
+		int i = 0;
+		bool found = false;
+
+		while (!found && i < size)
+		{
+			if (pItem[i].id == id)
+				found = true;
+			else
+				i++;
+		}
+
+		if (found)
+		{
+			if (pItem[i].qty < qty)
+			{
+				quantity = pItem[i].qty;
+				pItem[i].qty = 0;
+			}
+			else
+			{
+				quantity = qty;
+				pItem[i].qty -= qty;
+			}
+		}
+	}
+
+	return quantity;
 }
 
 Inventory &Inventory::operator=(const Inventory &a)
@@ -126,27 +152,21 @@ Inventory &Inventory::operator=(const Inventory &a)
         if (size != a.size)
         {
             size = a.size;
+
 			if (size > 0)
 			{
 				if (pItem != nullptr)
 					delete[] pItem;
+
 				pItem = new Item[size];
 			}
 			else
 				pItem = nullptr;
         }
+
         for (int i = 0; i < size; i++)
             pItem[i] = a.pItem[i];
     }
+
     return *this;
-}
-
-Item &Inventory::operator[](int index)
-{
-    return pItem[index];
-}
-
-const Item &Inventory::operator[](int index) const
-{
-	return pItem[index];
 }
