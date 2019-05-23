@@ -21,7 +21,7 @@ public:
 	Inventory(const Item[], int size);
 	Inventory(const Inventory &);
 	~Inventory();
-	void addItem(int id, int qty, int price, std::string desc);
+	void addItem(int id, int qty, int price, const std::string &desc);
 	void addItem(const Item &);
 	bool setItemList(const Item[], int size);
 	int getItem(int id, int qty = 0);
