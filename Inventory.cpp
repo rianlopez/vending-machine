@@ -44,7 +44,7 @@ Inventory::~Inventory()
     pItem = nullptr;
 }
 
-void Inventory::addItem(int id, int qty, int price, std::string desc)
+void Inventory::addItem(int id, int qty, int price, const std::string &desc)
 {
     Item *temp = new Item[size + 1];
 
