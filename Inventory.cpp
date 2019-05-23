@@ -85,10 +85,8 @@ void Inventory::addItem(const Item &a)
 	pItem = temp;
 }
 
-bool Inventory::setItemList(const Item a[], int size)
+void Inventory::setItemList(const Item a[], int size)
 {
-	bool valid = true;
-
 	if (size > 0)
 	{
 		if (this->size != size)
@@ -104,10 +102,6 @@ bool Inventory::setItemList(const Item a[], int size)
 		for (int i = 0; i < size; i++)
 			pItem[i] = a[i];
 	}
-	else
-		valid = false;
-
-	return valid;
 }
 
 int Inventory::getItem(int id, int qty)
