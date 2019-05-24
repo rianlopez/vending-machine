@@ -34,6 +34,7 @@ private:
 
 	virtual void printPaymentType() const = 0;
 	virtual bool payment() = 0;
+	virtual int getNumOfModel() const = 0;
 
 public:
     Machine(int q = 0, int d = 0, int n = 0);
