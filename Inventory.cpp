@@ -51,8 +51,8 @@ void Inventory::addItem(int id, int qty, int price, const std::string &desc)
     for (int i = 0; i < size; i++)
         temp[i] = pItem[i];
 
-	if (qty < 0)
-		qty = 0;
+	if (qty < 1)
+		qty = 1;
 	if (price < 0)
 		price = 0;
 
@@ -69,7 +69,7 @@ void Inventory::addItem(int id, int qty, int price, const std::string &desc)
     pItem = temp;
 }
 
-void Inventory::addItem(const Item &a)
+void Inventory::addItem(const Item &a, int qty)
 {
 	Item *temp = new Item[size + 1];
 
@@ -77,6 +77,12 @@ void Inventory::addItem(const Item &a)
 		temp[i] = pItem[i];
 
 	temp[size] = a;
+
+	if (qty < 1)
+		qty = 1;
+
+	temp[size].initQty = temp[size].qty = qty;
+
 	size++;
 
 	if (pItem != nullptr)

@@ -21,10 +21,10 @@ public:
 	Inventory(const Item[], int size);
 	Inventory(const Inventory &);
 	~Inventory();
-	void addItem(int id, int qty, int price, const std::string &desc);
-	void addItem(const Item &);
+	void addItem(int id, int qty = 1, int price = 0, const std::string &desc = "");
+	void addItem(const Item &, int qty = 1);
 	void setItemList(const Item[], int size);
-	int getItem(int id, int qty = 0);
+	int getItem(int id, int qty = 1);
 	int getSize() const { return size; }
 	Inventory &operator=(const Inventory &);
 	Item &operator[](int index) { return pItem[index]; }
