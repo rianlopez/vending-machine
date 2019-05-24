@@ -186,6 +186,8 @@ void Machine::print(std::ofstream &outFile) const
 			<< std::right << std::setw(5) << products[i].initQty
 			<< std::setw(11) << products[i].qty << std::endl;
 	}
+	
+	outFile << std::endl;
 }
 
 void Machine::print(const std::string &fileName) const
