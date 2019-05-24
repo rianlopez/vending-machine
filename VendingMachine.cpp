@@ -25,9 +25,8 @@
 
 using namespace std;
 
-void initializeMachines(vector<Machine*> pMach);
+void initializeMachines(vector<Machine*> pMach, Inventory &mainInventory);
 void initializeInventory(Inventory &inv);
-int findSize(string fileName);
 
 int main()
 {
@@ -35,25 +34,27 @@ int main()
 	Machine machineSystem;
 	vector<Machine *> pMach;
 	initializeInventory(mainInventory);
-	initializeMachines(pMach);
-
-	//Inventory mach0 = pMach[0]->getInventory();
-
+	mainInventory.print();
+	initializeMachines(pMach, mainInventory);
+	cout << endl << endl;
+	mainInventory.print();
 
 	return 0;
 }
 
-void initializeMachines(vector<Machine*> pMach)
+void initializeMachines(vector<Machine*> pMach, Inventory &mainInventory)
 {
+
 	int dollar = 0;
 	int quarters = 0;
 	int dimes = 0;
 	int nickels = 0;
-	int capacity = 1;
 
-	int modelQuantity = 0;
-	string oneLine;
-	string model;
+	int capacity = 0; //how many items in one machine
+	int modelQuantity = 0; // how many of one type of machine
+	string model; // type of machine (100A, 100B, 100C, 100D etc)
+
+	string oneLine; //stores one line of text file
 
 	ifstream machineFile;
 	machineFile.open("machines.txt");
@@ -64,21 +65,8 @@ void initializeMachines(vector<Machine*> pMach)
 		return;
 	}
 	
-	/*
-
-	ifstream machines();
-	macines >> model >> quantity
-	loop quantity times
-		use if/ switch statement for model
-		use vector
-		input coins
-		input numItems
-		loop numIteams
-			create a machine w/ an id
-	*/
-
 	istringstream machineStream;
-	int index = 0;
+	int index = 0; //keeps track of index for machine vector
 
 	getline(machineFile, oneLine);
 	machineStream.str(oneLine);
@@ -128,6 +116,7 @@ void initializeMachines(vector<Machine*> pMach)
 			{
 				string code;
 				Inventory::Item oneItem;
+				int available = 0;
 				int id = 0, quantity = 0;
 				getline(machineFile, oneLine);
 				machineStream.clear();
@@ -137,7 +126,10 @@ void initializeMachines(vector<Machine*> pMach)
 				oneItem.id = id;
 				oneItem.qty = quantity;
 
-				pMach[index-1]->addItem(oneItem); //////////////////////////////////////////////////////////////////////////////////////
+				pMach[index-1]->addProduct(code, oneItem); 
+				available = mainInventory.getItem(id, quantity);
+				//change quantity of main inventory here
+
 			}
 		}
 		getline(machineFile, oneLine);
@@ -149,61 +141,8 @@ void initializeMachines(vector<Machine*> pMach)
 }
 
 
-
-	/*
-
-	ifstream machines();
-	macines >> model >> quantity
-	loop quantity times
-		use if/ switch statement for model
-		use vector
-		input coins
-		input numItems
-		loop numIteams
-			create a machine w/ an id
-
-	*/
-
-
-	//get model, how many machines for that model
-	//input quarters, dimes, nickels,
-
-	//outer loop # of machines
-	//get number of items in the machine
-	//inner for loop i < # of items in the machine
-
-	//parallel arrays, keep one for code
-	//input item id for each code and quantity inside machine Inventory
-	//subtract from mainInventory
-//}
-
-int findSize(string fileName)
-{
-	ifstream oneFile;
-	int index = 0;
-	oneFile.open(fileName);
-
-	if (!oneFile)
-	{
-		cout << "Error: Unable to open " << fileName;
-	}
-
-	while (!oneFile.eof())
-	{
-		string oneItem;
-		getline(oneFile, oneItem);
-		index++;
-	}
-	oneFile.close();
-
-	return index - 1;;
-}
-
 void initializeInventory(Inventory &inv)
 {
-	int index = 0;
-	int size = findSize("products.txt");
-
 	//item local variables
 	int id, price, quantity;
 	string description = "";
@@ -217,13 +156,7 @@ void initializeInventory(Inventory &inv)
 		cout << "Error: Unable to open products.txt";
 		return;
 	}
-
-	//using while loop
-	//declare Item product
-	//input product id, quantity, price, description
-	//add product to Inventory
-
-	while (!productFile.eof() && size != index)
+	while (!productFile.eof())
 	{
 		Inventory::Item product;
 		istringstream productStream;
@@ -241,8 +174,6 @@ void initializeInventory(Inventory &inv)
 		product.desc = description;
 
 		inv.addItem(product);
-
-		index++;
 	}
 
 	productFile.close();	
