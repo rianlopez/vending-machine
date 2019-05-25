@@ -1,3 +1,5 @@
+// Implementation file of Machine class
+
 #include "Machine.h"
 
 Machine::Machine(int q, int d, int n)
@@ -152,6 +154,44 @@ void Machine::addProduct(const string &code, const Item &a)
 	pStr = temp;
 }
 
+Machine &Machine::operator=(const Machine &r)
+{
+	if (this != &r)
+	{
+		initDollarBill = r.initDollarBill;
+		initQuarter = r.initQuarter;
+		initDime = r.initDime;
+		initNickel = r.initNickel;
+		dollarBill = r.dollarBill;
+		quarter = r.quarter;
+		dime = r.dime;
+		nickel = r.nickel;
+		purchaseCount = r.purchaseCount;
+		name = r.name;
+		products = r.products;
+
+		if (productCount != r.productCount)
+		{
+			productCount = r.productCount;
+
+			if (productCount > 0)
+			{
+				if (pStr != nullptr)
+					delete[] pStr;
+
+				pStr = new string[productCount];
+			}
+			else
+				pStr = nullptr;
+		}
+
+		for (int i = 0; i < productCount; i++)
+			pStr[i] = r.pStr[i];
+	}
+
+	return *this;
+}
+
 void Machine::purchase()
 {
 	printPaymentType();
@@ -242,42 +282,4 @@ void Machine::print(const string &fileName) const
 	outFile.open(fileName);
 
 	print(outFile);
-}
-
-Machine &Machine::operator=(const Machine &r)
-{
-	if (this != &r)
-	{
-		initDollarBill = r.initDollarBill;
-		initQuarter = r.initQuarter;
-		initDime = r.initDime;
-		initNickel = r.initNickel;
-		dollarBill = r.dollarBill;
-		quarter = r.quarter;
-		dime = r.dime;
-		nickel = r.nickel;
-		purchaseCount = r.purchaseCount;
-		name = r.name;
-		products = r.products;
-
-		if (productCount != r.productCount)
-		{
-			productCount = r.productCount;
-
-			if (productCount > 0)
-			{
-				if (pStr != nullptr)
-					delete[] pStr;
-
-				pStr = new string[productCount];
-			}
-			else
-				pStr = nullptr;
-		}
-
-		for (int i = 0; i < productCount; i++)
-			pStr[i] = r.pStr[i];
-	}
-
-	return *this;
 }

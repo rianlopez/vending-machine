@@ -53,12 +53,12 @@ public:
 	void setName(const string &);
 	void addProduct(const string &code, int id, int qty = 0, int price = 0, const string &desc = "");
 	void addProduct(const string &, const Item &);
-	void purchase();
-	void print(ofstream &outFile) const;
-	void print(const string &fileName) const;
 	string getName() const { return name; }
 	Machine &operator=(const Machine &);
 
+	virtual void purchase();
+	virtual void print(ofstream &outFile) const;
+	virtual void print(const string &fileName) const;
 	virtual int getNumOfModel() const = 0;
 
 };
