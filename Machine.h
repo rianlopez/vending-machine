@@ -8,6 +8,8 @@
 #include <fstream>
 #include <iomanip>
 
+using namespace std;
+
 // in cents
 const int QUARTER = 25;
 const int DIME = 10;
@@ -28,17 +30,16 @@ private:
     int nickel;
 	int purchaseCount; // number of valid transactions
     int productCount;
-	std::string name;
-	std::string *pStr;
+	string name;
+	string *pStr;
 	Inventory products;
 
 	virtual void printPaymentType() const = 0;
 	virtual bool payment() = 0;
-	virtual int getNumOfModel() const = 0;
 
 public:
     Machine(int q = 0, int d = 0, int n = 0);
-	Machine(const std::string &);
+	Machine(const string &);
     Machine(const Machine &);
 	~Machine();
 	void setInitQuarter(int);
@@ -49,14 +50,16 @@ public:
     void setDime(int);
     void setNickel(int);
     void setCoins(int q, int d, int n);
-	void setName(const std::string &);
-	void addProduct(const std::string &code, int id, int qty = 1, int price = 0, const std::string &desc = "");
-	void addProduct(const std::string &, const Inventory::Item &, int qty = 1);
+	void setName(const string &);
+	void addProduct(const string &code, int id, int qty = 0, int price = 0, const string &desc = "");
+	void addProduct(const string &, const Item &);
 	void purchase();
-	void print(std::ofstream &outFile) const;
-	void print(const std::string &fileName) const;
-	std::string getName() const { return name; }
+	void print(ofstream &outFile) const;
+	void print(const string &fileName) const;
+	string getName() const { return name; }
 	Machine &operator=(const Machine &);
+
+	virtual int getNumOfModel() const = 0;
 
 };
 

@@ -19,7 +19,7 @@ Machine::Machine(int q, int d, int n)
 	pStr = nullptr;
 }
 
-Machine::Machine(const std::string &s)
+Machine::Machine(const string &s)
 {
 	initDollarBill = dollarBill = 0;
 	initQuarter = quarter = 0;
@@ -48,7 +48,7 @@ Machine::Machine(const Machine &a)
 	
 	if (productCount > 0)
 	{
-		pStr = new std::string[productCount];
+		pStr = new string[productCount];
 
 		for (int i = 0; i < productCount; i++)
 			pStr[i] = a.pStr[i];
@@ -109,16 +109,16 @@ void Machine::setCoins(int q, int d, int n)
 	setNickel(n);
 }
 
-void Machine::setName(const std::string &s)
+void Machine::setName(const string &s)
 {
 	name = s;
 }
 
-void Machine::addProduct(const std::string &code, int id, int qty, int price, const std::string &desc)
+void Machine::addProduct(const string &code, int id, int qty, int price, const string &desc)
 {
 	products.addItem(id, qty, price, desc);
 
-	std::string *temp = new std::string[productCount + 1];
+	string *temp = new string[productCount + 1];
 
 	for (int i = 0; i < productCount; i++)
 		temp[i] = pStr[i];
@@ -133,11 +133,11 @@ void Machine::addProduct(const std::string &code, int id, int qty, int price, co
 	pStr = temp;
 }
 
-void Machine::addProduct(const std::string &code, const Inventory::Item &a, int qty)
+void Machine::addProduct(const string &code, const Item &a)
 {
-	products.addItem(a, qty);
+	products.addItem(a);
 
-	std::string *temp = new std::string[productCount + 1];
+	string *temp = new string[productCount + 1];
 
 	for (int i = 0; i < productCount; i++)
 		temp[i] = pStr[i];
@@ -154,45 +154,91 @@ void Machine::addProduct(const std::string &code, const Inventory::Item &a, int 
 
 void Machine::purchase()
 {
+	printPaymentType();
 
+	cout << "Available items:" << endl;
+
+	for (int i = 0; i < productCount; i++)
+	{
+		if (products[i].qty != 0)
+			cout << setw(7) << pStr[i] << setw(4) << products[i].price << " " << products[i].desc << endl;
+	}
+
+	int pos;
+	bool valid = false;
+
+	do
+	{
+		cout << "Select an item --> ";
+		string code;
+		cin >> code;
+
+		int i = 0;
+		bool found = false;
+
+		while (!found && i < productCount)
+		{
+			if (pStr[i] == code)
+			{
+				pos = i;
+				found = true;
+			}
+			else
+				i++;
+		}
+
+		if (!found || products[pos].qty == 0)
+			cerr << "Error: Invalid option. Please try again" << endl;
+		else
+			valid = true;
+
+	} while (!valid);
+
+	cout << "You selected \"" << products[pos].desc << "\"." << endl
+		<< "The cost of this item is " << products[pos].price << " cents." << endl;
+
+	if (payment())
+	{
+		products[pos].qty--;
+		purchaseCount++;
+	}
 }
 
-void Machine::print(std::ofstream &outFile) const
+void Machine::print(ofstream &outFile) const
 {
 	double initBalance = (initQuarter * QUARTER + initDime * DIME + initNickel * NICKEL) / 100.0;
 	double currBalance = (quarter * QUARTER + dime * DIME + nickel * NICKEL) / 100.0;
 	double cost = currBalance - initBalance;
 
-	outFile << "Machine: " << name << std::endl
-		<< std::fixed << std::showpoint << std::setprecision(2)
+	outFile << "Machine: " << name << endl
+		<< fixed << showpoint << setprecision(2)
 		<< "Initial balance: $" << initBalance;
 	outFile << " (" << initDollarBill << " $, " << initQuarter << " Q, "
-		<< initDime << " D, " << initNickel << " N)" << std::endl;
-	outFile << "Number of valid transactions: " << purchaseCount << std::endl;
-	outFile << std::fixed << std::showpoint << std::setprecision(2)
-		<< "Total cost: $" << cost << std::endl
+		<< initDime << " D, " << initNickel << " N)" << endl
+		<< "Number of valid transactions: " << purchaseCount << endl;
+	outFile << fixed << showpoint << setprecision(2)
+		<< "Total cost: $" << cost << endl
 		<< "Current balance: $" << currBalance;
 	outFile << " (" << dollarBill << " $, " << quarter << " Q, "
-		<< dime << " D, " << nickel << " N)" << std::endl << std::endl
-		<< "Machine inventory:" << std::endl
-		<< "Code" << std::setw(8) << "Id" << "    "
-		<< std::left << std::setw(20) << "Description"
-		<< std::right << "Initial" << std::setw(11) << "Current" << std::endl;
+		<< dime << " D, " << nickel << " N)" << endl << endl
+		<< "Machine inventory:" << endl
+		<< "Code" << setw(8) << "Id" << "    "
+		<< left << setw(20) << "Description"
+		<< right << "Initial" << setw(11) << "Current" << endl;
 
 	for (int i = 0; i < productCount; i++)
 	{
-		outFile << std::setw(4) << pStr[i] << std::setw(8) << products[i].id
-			<< "    " << std::left << std::setw(20) << products[i].desc
-			<< std::right << std::setw(5) << products[i].initQty
-			<< std::setw(11) << products[i].qty << std::endl;
+		outFile << setw(4) << pStr[i] << setw(8) << products[i].id
+			<< "    " << left << setw(20) << products[i].desc
+			<< right << setw(5) << products[i].initQty << setw(11) << products[i].qty << endl;
 	}
-	
-	outFile << std::endl;
+
+	outFile << endl;
 }
 
-void Machine::print(const std::string &fileName) const
+void Machine::print(const string &fileName) const
 {
-	std::ofstream outFile(fileName);
+	ofstream outFile(fileName);
 	outFile.open(fileName);
 
 	print(outFile);
@@ -200,20 +246,20 @@ void Machine::print(const std::string &fileName) const
 
 Machine &Machine::operator=(const Machine &r)
 {
-	initDollarBill = r.initDollarBill;
-	initQuarter = r.initQuarter;
-	initDime = r.initDime;
-	initNickel = r.initNickel;
-	dollarBill = r.dollarBill;
-	quarter = r.quarter;
-	dime = r.dime;
-	nickel = r.nickel;
-	purchaseCount = r.purchaseCount;
-	name = r.name;
-	products = r.products;
-
 	if (this != &r)
 	{
+		initDollarBill = r.initDollarBill;
+		initQuarter = r.initQuarter;
+		initDime = r.initDime;
+		initNickel = r.initNickel;
+		dollarBill = r.dollarBill;
+		quarter = r.quarter;
+		dime = r.dime;
+		nickel = r.nickel;
+		purchaseCount = r.purchaseCount;
+		name = r.name;
+		products = r.products;
+
 		if (productCount != r.productCount)
 		{
 			productCount = r.productCount;
@@ -223,7 +269,7 @@ Machine &Machine::operator=(const Machine &r)
 				if (pStr != nullptr)
 					delete[] pStr;
 
-				pStr = new std::string[productCount];
+				pStr = new string[productCount];
 			}
 			else
 				pStr = nullptr;

@@ -51,8 +51,8 @@ void Inventory::addItem(int id, int qty, int price, const std::string &desc)
     for (int i = 0; i < size; i++)
         temp[i] = pItem[i];
 
-	if (qty < 1)
-		qty = 1;
+	if (qty < 0)
+		qty = 0;
 	if (price < 0)
 		price = 0;
 
@@ -69,7 +69,7 @@ void Inventory::addItem(int id, int qty, int price, const std::string &desc)
     pItem = temp;
 }
 
-void Inventory::addItem(const Item &a, int qty)
+void Inventory::addItem(const Item &a)
 {
 	Item *temp = new Item[size + 1];
 
@@ -77,11 +77,6 @@ void Inventory::addItem(const Item &a, int qty)
 		temp[i] = pItem[i];
 
 	temp[size] = a;
-
-	if (qty < 1)
-		qty = 1;
-
-	temp[size].initQty = temp[size].qty = qty;
 
 	size++;
 
@@ -110,39 +105,42 @@ void Inventory::setItemList(const Item a[], int size)
 	}
 }
 
-int Inventory::getItem(int id, int qty)
+Item Inventory::getItem(int id, int qty)
 {
-	int quantity = 0;
+	Item temp;
 
-	if (qty > 0)
+	if (qty < 0)
+		qty = 0;
+
+	int i = 0;
+	bool found = false;
+
+	while (!found && i < size)
 	{
-		int i = 0;
-		bool found = false;
-
-		while (!found && i < size)
-		{
-			if (pItem[i].id == id)
-				found = true;
-			else
-				i++;
-		}
-
-		if (found)
-		{
-			if (pItem[i].qty < qty)
-			{
-				quantity = pItem[i].qty;
-				pItem[i].qty = 0;
-			}
-			else
-			{
-				quantity = qty;
-				pItem[i].qty -= qty;
-			}
-		}
+		if (pItem[i].id == id)
+			found = true;
+		else
+			i++;
 	}
 
-	return quantity;
+	if (found)
+	{
+		if (pItem[i].qty < qty)
+		{
+			temp = pItem[i];
+			pItem[i].qty = 0;
+		}
+		else
+		{
+			temp = pItem[i];
+			temp.initQty = temp.qty = qty;
+			pItem[i].qty -= qty;
+		}
+	}
+	else
+		throw "Error: Item not found";
+
+	return temp;
 }
 
 Inventory &Inventory::operator=(const Inventory &a)
