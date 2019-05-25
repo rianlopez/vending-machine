@@ -11,7 +11,7 @@ Machine::Machine(int q, int d, int n)
 	if (n < 0)
 		n = 0;
 
-	initDollarBill = dollarBill = 0;
+	initDollar = dollar = 0;
 	initQuarter = quarter = q;
 	initDime = dime = d;
 	initNickel = nickel = n;
@@ -23,7 +23,7 @@ Machine::Machine(int q, int d, int n)
 
 Machine::Machine(const string &s)
 {
-	initDollarBill = dollarBill = 0;
+	initDollar = dollar = 0;
 	initQuarter = quarter = 0;
 	initDime = dime = 0;
 	initNickel = nickel = 0;
@@ -35,11 +35,11 @@ Machine::Machine(const string &s)
 
 Machine::Machine(const Machine &a)
 {
-	initDollarBill = a.initDollarBill;
+	initDollar = a.initDollar;
 	initQuarter = a.initQuarter;
 	initDime = a.initDime;
 	initNickel = a.initNickel;
-	dollarBill = a.dollarBill;
+	dollar = a.dollar;
 	quarter = a.quarter;
 	dime = a.dime;
 	nickel = a.nickel;
@@ -154,44 +154,6 @@ void Machine::addProduct(const string &code, const Item &a)
 	pStr = temp;
 }
 
-Machine &Machine::operator=(const Machine &r)
-{
-	if (this != &r)
-	{
-		initDollarBill = r.initDollarBill;
-		initQuarter = r.initQuarter;
-		initDime = r.initDime;
-		initNickel = r.initNickel;
-		dollarBill = r.dollarBill;
-		quarter = r.quarter;
-		dime = r.dime;
-		nickel = r.nickel;
-		purchaseCount = r.purchaseCount;
-		name = r.name;
-		products = r.products;
-
-		if (productCount != r.productCount)
-		{
-			productCount = r.productCount;
-
-			if (productCount > 0)
-			{
-				if (pStr != nullptr)
-					delete[] pStr;
-
-				pStr = new string[productCount];
-			}
-			else
-				pStr = nullptr;
-		}
-
-		for (int i = 0; i < productCount; i++)
-			pStr[i] = r.pStr[i];
-	}
-
-	return *this;
-}
-
 void Machine::purchase()
 {
 	printPaymentType();
@@ -237,7 +199,7 @@ void Machine::purchase()
 	cout << "You selected \"" << products[pos].desc << "\"." << endl
 		<< "The cost of this item is " << products[pos].price << " cents." << endl;
 
-	if (payment())
+	if (payment(products[pos].price))
 	{
 		products[pos].qty--;
 		purchaseCount++;
@@ -246,20 +208,20 @@ void Machine::purchase()
 
 void Machine::print(ofstream &outFile) const
 {
-	double initBalance = (initQuarter * QUARTER + initDime * DIME + initNickel * NICKEL) / 100.0;
-	double currBalance = (quarter * QUARTER + dime * DIME + nickel * NICKEL) / 100.0;
+	double initBalance = (initDollar * DOLLAR + initQuarter * QUARTER + initDime * DIME + initNickel * NICKEL) / 100.0;
+	double currBalance = (dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL) / 100.0;
 	double cost = currBalance - initBalance;
 
 	outFile << "Machine: " << name << endl
 		<< fixed << showpoint << setprecision(2)
 		<< "Initial balance: $" << initBalance;
-	outFile << " (" << initDollarBill << " $, " << initQuarter << " Q, "
+	outFile << " (" << initDollar << " $, " << initQuarter << " Q, "
 		<< initDime << " D, " << initNickel << " N)" << endl
 		<< "Number of valid transactions: " << purchaseCount << endl;
 	outFile << fixed << showpoint << setprecision(2)
 		<< "Total cost: $" << cost << endl
 		<< "Current balance: $" << currBalance;
-	outFile << " (" << dollarBill << " $, " << quarter << " Q, "
+	outFile << " (" << dollar << " $, " << quarter << " Q, "
 		<< dime << " D, " << nickel << " N)" << endl << endl
 		<< "Machine inventory:" << endl
 		<< "Code" << setw(8) << "Id" << "    "
@@ -278,8 +240,48 @@ void Machine::print(ofstream &outFile) const
 
 void Machine::print(const string &fileName) const
 {
-	ofstream outFile(fileName);
-	outFile.open(fileName);
+	ofstream outFile;
+	outFile.open(fileName, ios::app);
 
 	print(outFile);
+
+	outFile.close();
+}
+
+Machine &Machine::operator=(const Machine &r)
+{
+	if (this != &r)
+	{
+		initDollar = r.initDollar;
+		initQuarter = r.initQuarter;
+		initDime = r.initDime;
+		initNickel = r.initNickel;
+		dollar = r.dollar;
+		quarter = r.quarter;
+		dime = r.dime;
+		nickel = r.nickel;
+		purchaseCount = r.purchaseCount;
+		name = r.name;
+		products = r.products;
+
+		if (productCount != r.productCount)
+		{
+			productCount = r.productCount;
+
+			if (productCount > 0)
+			{
+				if (pStr != nullptr)
+					delete[] pStr;
+
+				pStr = new string[productCount];
+			}
+			else
+				pStr = nullptr;
+		}
+
+		for (int i = 0; i < productCount; i++)
+			pStr[i] = r.pStr[i];
+	}
+
+	return *this;
 }

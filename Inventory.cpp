@@ -1,3 +1,5 @@
+// Implementation file of Inventory class
+
 #include "Inventory.h"
 
 Inventory::Inventory()
