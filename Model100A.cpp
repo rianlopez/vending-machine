@@ -13,84 +13,100 @@ bool Model100A::payment(int cost)
 {
 	bool valid = false;
 
-	cout << "Insert your money --> ";
-
-	string input;
-	cin.ignore();
-	getline(cin, input);
-	istringstream inString(input);
-	int amount = 0;
-	int value;
-
-	while (inString >> value && value != 0)
+	if (cost > 0 && cost % 5 == 0)
 	{
-		if (value == 100)
-			amount += value;
-	}
+		cout << "Insert your money --> ";
 
-	if (amount > 0)
-	{
-		cout << "You entered an amount of " << amount << " cents." << endl
-			<< "Processing your purchase ..." << endl;
+		string input;
+		cin.ignore();
+		getline(cin, input);
+		istringstream inString(input);
+		int amount = 0;
+		int value;
 
-		amount -= cost;
-
-		int changeAmount = 0;
-		int quarterBack = 0;
-		int dimeBack = 0;
-		int nickelBack = 0;
-
-
-		while (changeAmount + QUARTER <= amount && quarterBack != quarter)
+		while (inString >> value && value != 0)
 		{
-			changeAmount += QUARTER;
-			quarterBack++;
+			if (value == 100)
+				amount += value;
 		}
 
-		if (changeAmount != amount)
+		if (amount > 0)
 		{
-			while (changeAmount + DIME <= amount && dimeBack != dime)
+			cout << "You entered an amount of " << amount << " cents." << endl
+				<< "Processing your purchase ..." << endl;
+
+			amount -= cost;
+
+			if (amount > 0)
 			{
-				changeAmount += DIME;
-				dimeBack++;
-			}
-		}
+				int changeAmount = 0;
+				int quarterBack = 0;
+				int dimeBack = 0;
+				int nickelBack = 0;
 
-		if (changeAmount != amount)
-		{
-			while (changeAmount + NICKEL <= amount && nickelBack != nickel)
+
+				while (changeAmount + QUARTER <= amount && quarterBack < quarter)
+				{
+					changeAmount += QUARTER;
+					quarterBack++;
+				}
+
+				if (changeAmount != amount)
+				{
+					while (changeAmount + DIME <= amount && dimeBack < dime)
+					{
+						changeAmount += DIME;
+						dimeBack++;
+					}
+				}
+
+				if (changeAmount != amount)
+				{
+					while (changeAmount + NICKEL <= amount && nickelBack < nickel)
+					{
+						changeAmount += NICKEL;
+						nickelBack++;
+					}
+				}
+
+				if (changeAmount == amount)
+				{
+					dollar++;
+					quarter -= quarterBack;
+					dime -= dimeBack;
+					nickel -= nickelBack;
+
+					valid = true;
+
+					cout << "Your change of " << amount << " cents is given as:" << endl
+						<< "    quarter(s):" << setw(2) << quarterBack << endl
+						<< "    dime(s):" << setw(5) << dimeBack << endl
+						<< "    nickel(s):" << setw(3) << nickelBack << endl;
+				}
+				else
+					cout << "Insufficient changes!" << endl;
+			}
+			else if (amount == 0)
 			{
-				changeAmount += NICKEL;
-				nickelBack++;
+				cout << "Exact change recieved." << endl;
+				valid = true;
 			}
-		}
+			else
+				cout << "Insufficient funds!" << endl;
 
-		if (changeAmount == amount)
-		{
-			dollar++;
-			quarter -= quarterBack;
-			dime -= dimeBack;
-			nickel -= nickelBack;
-
-			valid = true;
-
-			cout << "Your change of " << amount << " cents is given as:" << endl
-				<< "    quarter(s):" << setw(2) << quarterBack << endl
-				<< "    dime(s):" << setw(5) << dimeBack << endl
-				<< "    nickel(s):" << setw(3) << nickelBack << endl
-				<< "Thank you! Please take your item." << endl;
+			if (valid)
+				cout << "Thank you! Please take your item." << endl;
+			else
+			{
+				cout << "Your transaction cannot be processed." << endl
+					<< "Please take back your dollar bill." << endl;
+			}
 		}
 		else
-		{
-			cout << "Insufficient changes!" << endl
-				<< "Your transaction cannot be processed." << endl
-				<< "Please take back your dollar bill." << endl;
-		}
-	}
-	else
-		cout << "You chose to cancel your selection." << endl;
+			cout << "You chose to cancel your selection." << endl;
 
-	cout << endl;
+		cout << endl;
+	}
 
 	return valid;
 }

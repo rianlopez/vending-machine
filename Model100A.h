@@ -11,6 +11,7 @@ class Model100A : public Machine
 private:
 	static int numOfModel100A;
 
+protected:
 	virtual void printPaymentType() const;
 	virtual bool payment(int cost);
 
