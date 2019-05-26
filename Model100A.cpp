@@ -21,13 +21,17 @@ bool Model100A::payment(int cost)
 		cin.ignore();
 		getline(cin, input);
 		istringstream inString(input);
+		int dollarCount = 0;
 		int amount = 0;
 		int value;
 
 		while (inString >> value && value != 0)
 		{
 			if (value == 100)
+			{
 				amount += value;
+				dollarCount++;
+			}
 		}
 
 		if (amount > 0)
@@ -51,27 +55,21 @@ bool Model100A::payment(int cost)
 					quarterBack++;
 				}
 
-				if (changeAmount != amount)
+				while (changeAmount + DIME <= amount && dimeBack < dime)
 				{
-					while (changeAmount + DIME <= amount && dimeBack < dime)
-					{
-						changeAmount += DIME;
-						dimeBack++;
-					}
+					changeAmount += DIME;
+					dimeBack++;
 				}
 
-				if (changeAmount != amount)
+				while (changeAmount + NICKEL <= amount && nickelBack < nickel)
 				{
-					while (changeAmount + NICKEL <= amount && nickelBack < nickel)
-					{
-						changeAmount += NICKEL;
-						nickelBack++;
-					}
+					changeAmount += NICKEL;
+					nickelBack++;
 				}
 
 				if (changeAmount == amount)
 				{
-					dollar++;
+					dollar += dollarCount;
 					quarter -= quarterBack;
 					dime -= dimeBack;
 					nickel -= nickelBack;
