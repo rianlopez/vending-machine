@@ -190,7 +190,7 @@ void Machine::purchase()
 		}
 
 		if (!found || products[pos].qty == 0)
-			cerr << "Error: Invalid option. Please try again" << endl;
+			cerr << "Error: Invalid option. Please try again." << endl;
 		else
 			valid = true;
 
