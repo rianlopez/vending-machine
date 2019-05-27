@@ -233,8 +233,8 @@ void Machine::purchase()
 
 void Machine::print(ofstream &outFile) const
 {
-	double initBalance = (initDollar * DOLLAR + initQuarter * QUARTER + initDime * DIME + initNickel * NICKEL) / 100.0;
-	double currBalance = balance / 100.0;
+	double initBalance = (initDollar * DOLLAR + initQuarter * QUARTER + initDime * DIME + initNickel * NICKEL) / 100.00;
+	double currBalance = balance / 100.00;
 	double cost = currBalance - initBalance;
 
 	outFile << "Machine: " << name << endl
