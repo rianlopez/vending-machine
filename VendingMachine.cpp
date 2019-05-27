@@ -227,17 +227,19 @@ void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &ve
 	{
 		int index = search(pMach, machineChoice, vectorSize);
 
-		while (index == -1)
+		while (index == -1 && machineChoice != "spring19")
 		{
 			cout << "Machine not found! Select machine --> ";
 			cin >> machineChoice;
 			index = search(pMach, machineChoice, vectorSize);
 		}
 
-		pMach[index]->purchase();
-		
-		cout << "Select machine --> ";
-		cin >> machineChoice;
+		if (index != -1)
+		{
+			pMach[index]->purchase();
+			cout << "Select machine --> ";
+			cin >> machineChoice;
+		}
 
 	}
 }
