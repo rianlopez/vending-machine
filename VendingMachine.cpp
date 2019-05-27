@@ -33,11 +33,6 @@ void printReport(const vector<Machine *> pMach, int vectorSize);
 
 int main()
 {
-	ofstream file;
-	file.open("codebind.txt");
-	file << "Please write this text to a file.\n this text is written using C++\n";
-	file.close();
-
 	int vectorSize = 0;
 	Inventory mainInventory; //contains all the available products
 	vector<Machine *> pMach; //contains all the machines
