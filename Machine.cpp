@@ -15,6 +15,7 @@ Machine::Machine(int q, int d, int n)
 	initQuarter = quarter = q;
 	initDime = dime = d;
 	initNickel = nickel = n;
+	balance = dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL;
 	purchaseCount = 0;
 	productCount = 0;
 	name = "";
@@ -27,6 +28,7 @@ Machine::Machine(const string &s)
 	initQuarter = quarter = 0;
 	initDime = dime = 0;
 	initNickel = nickel = 0;
+	balance = dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL;
 	purchaseCount = 0;
 	productCount = 0;
 	name = s;
@@ -43,6 +45,7 @@ Machine::Machine(const Machine &a)
 	quarter = a.quarter;
 	dime = a.dime;
 	nickel = a.nickel;
+	balance = dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL;
 	purchaseCount = a.purchaseCount;
 	productCount = a.productCount;
 	name = a.name;
@@ -91,17 +94,38 @@ void Machine::setInitCoins(int q, int d, int n)
 
 void Machine::setQuarter(int q)
 {
-	quarter = q < 0 ? 0 : q;
+	if (q < 0)
+		q = 0;
+
+	if (quarter != q)
+	{
+		balance += (q - quarter) * QUARTER;
+		quarter = q;
+	}
 }
 
 void Machine::setDime(int d)
 {
-	dime = d < 0 ? 0 : d;
+	if (d < 0)
+		d = 0;
+
+	if (dime != d)
+	{
+		balance += (d - dime) * DIME;
+		dime = d;
+	}
 }
 
 void Machine::setNickel(int n)
 {
-	nickel = n < 0 ? 0 : n;
+	if (n < 0)
+		n = 0;
+
+	if (nickel != n)
+	{
+		balance += (n - nickel) * NICKEL;
+		nickel = n;
+	}
 }
 
 void Machine::setCoins(int q, int d, int n)
@@ -201,15 +225,16 @@ void Machine::purchase()
 
 	if (payment(products[pos].price))
 	{
-		products[pos].qty--;
+		balance += products[pos].price;
 		purchaseCount++;
+		products[pos].qty--;
 	}
 }
 
 void Machine::print(ofstream &outFile) const
 {
 	double initBalance = (initDollar * DOLLAR + initQuarter * QUARTER + initDime * DIME + initNickel * NICKEL) / 100.0;
-	double currBalance = (dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL) / 100.0;
+	double currBalance = balance / 100.0;
 	double cost = currBalance - initBalance;
 
 	outFile << "Machine: " << name << endl
@@ -260,6 +285,7 @@ Machine &Machine::operator=(const Machine &r)
 		quarter = r.quarter;
 		dime = r.dime;
 		nickel = r.nickel;
+		balance = r.balance;
 		purchaseCount = r.purchaseCount;
 		name = r.name;
 		products = r.products;

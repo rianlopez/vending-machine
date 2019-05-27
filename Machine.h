@@ -29,6 +29,7 @@ protected:
     int quarter;
     int dime;
     int nickel;
+	int balance;	   // in cents
 	int purchaseCount; // number of valid transactions
     int productCount;
 	string name;
