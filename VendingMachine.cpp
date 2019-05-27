@@ -27,17 +27,17 @@ using namespace std;
 
 void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory, int &vectorSize);
 void initializeInventory(Inventory &inv);
-void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int vectorSize);
+void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &vectorSize);
 int search(vector<Machine *> pMach, string key, int vectorSize);
 void printReport(const vector<Machine *> pMach, int vectorSize);
 
-
-//print report
-	//go through vector and print;
-
-
 int main()
 {
+	ofstream file;
+	file.open("codebind.txt");
+	file << "Please write this text to a file.\n this text is written using C++\n";
+	file.close();
+
 	int vectorSize = 0;
 	Inventory mainInventory; //contains all the available products
 	vector<Machine *> pMach; //contains all the machines
@@ -190,13 +190,10 @@ void initializeInventory(Inventory &inv)
 	productFile.close();
 }
 
-void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int vectorSize)
+void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &vectorSize)
 {
 	string startUpCode;
 	string machineChoice;
-	Model100A machineA;
-	Model100B machineB;
-	Model100C machineC;
 
 	cout << "Please enter a start up code --> ";
 	cin >> startUpCode;
@@ -239,15 +236,14 @@ void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int vec
 		{
 			cout << "Machine not found! Select machine --> ";
 			cin >> machineChoice;
-			search(pMach, machineChoice, vectorSize);
+			index = search(pMach, machineChoice, vectorSize);
 		}
-		pMach[index]->purchase();
 
+		pMach[index]->purchase();
+		
 		cout << "Select machine --> ";
 		cin >> machineChoice;
-		cout << endl;
 
-		//subtract from mainInventory
 	}
 }
 
