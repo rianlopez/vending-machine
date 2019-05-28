@@ -25,7 +25,7 @@ bool Model100C::payment(int cost)
 			getline(cin, input);
 
 			// credit card validation
-		for (i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
+		for (int i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
 		{
 			CreditCard[j] = input[i] - 48;
 		}
