@@ -22,44 +22,49 @@ bool Model100C::payment(int cost)
 		do
 		{
 			cout << "Enter your credit card number --> ";
-			//cin.ignore(); //doesn't get all the number
+			cin.clear();
 			getline(cin, input);
 
 			// credit card validation
-	for (i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
-	{
-		CreditCard[j] = input[i] - 48;
-	}
-	
-	int sum = 0;
-	for (int i = 1; i < input.length(); i++)
-	{
-		if (i % 2 == 0)
+		for (i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
 		{
+			CreditCard[j] = input[i] - 48;
+		}
 
+		int sum = 0;
+		for (int i = 1; i < input.length(); i++)
+		{
+			if (i % 2 == 0)
+			{
+
+			}
+			else
+			{
+				CreditCard[i] *= 2;
+			}
+			if (CreditCard[i] >= 10)
+			{
+				CreditCard[i] -= 9;
+			}
+			sum = sum + CreditCard[i];
+		}
+
+		if (sum % 10 == CreditCard[0])
+		{
+			valid = true;
+		}
+
+		sum *= 9;
+		check = to_string(sum);
+
+		if (check[check.length() - 1] - 48 == CreditCard[0])
+		{
+			valid = true;
 		}
 		else
 		{
-			CreditCard[i] *= 2;
+			valid = false;
 		}
-		if (CreditCard[i] >= 10)
-		{
-			CreditCard[i] -= 9;
-		}
-		sum = sum + CreditCard[i];
-	}
-
-	for (int i = 0; i < input.length(); i++)
-	{
-	}
-	if (sum % 10 == CreditCard[0])
-	{
-		valid = true;
-	}
-	else
-	{
-		valid = false;
-	}
 
 			if (!valid)
 			{
