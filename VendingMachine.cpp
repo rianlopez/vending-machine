@@ -3,11 +3,8 @@
 	Class: CSCI 140
 	Date: 05/13/2019
 	Description: Main class
-
 	I certify that the code below is my own work.
-
 	Exception(s): N/A
-
 */
 
 #include <iostream>
@@ -22,27 +19,25 @@
 #include "Model100B.h"
 #include "Model100C.h"
 
-
 using namespace std;
 
-void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory, int &vectorSize);
+void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory);
 void initializeInventory(Inventory &inv);
-void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &vectorSize);
-int search(vector<Machine *> pMach, string key, int vectorSize);
-void printReport(const vector<Machine *> pMach, int vectorSize);
+void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory);
+int search(vector<Machine *> pMach, string key);
+void printReport(const vector<Machine *> pMach);
 
 int main()
 {
-	int vectorSize = 0;
 	Inventory mainInventory; //contains all the available products
 	vector<Machine *> pMach; //contains all the machines
-	initializeSystem(pMach, mainInventory, vectorSize);
-	printReport(pMach, vectorSize);
-	
+	initializeSystem(pMach, mainInventory);
+	printReport(pMach);
+
 	return 0;
 }
 
-void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory, int &vectorSize)
+void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory)
 {
 	bool knownModel = true;
 	int dollar = 0;
@@ -64,7 +59,7 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory, int &
 		cout << "Error: Unable to open machine.txt";
 		return;
 	}
-	
+
 	istringstream machineStream;
 	int index = 0; //keeps track of index for machine vector
 
@@ -92,7 +87,7 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory, int &
 				pMach[index]->setName("100A" + to_string(j));
 
 				index++;
-					
+
 			}
 			else if (model == "100B")
 			{
@@ -103,7 +98,7 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory, int &
 				index++;
 			}
 			else if (model == "100C")
-			{ 
+			{
 				knownModel = true;
 				pMach.push_back(new Model100C);
 				pMach[index]->setName("100C" + to_string(j));
@@ -142,8 +137,6 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory, int &
 		machineStream >> model >> modelQuantity;
 	}
 	machineFile.close();
-
-	vectorSize = index;
 }
 
 
@@ -185,10 +178,11 @@ void initializeInventory(Inventory &inv)
 	productFile.close();
 }
 
-void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &vectorSize)
+void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory)
 {
 	string startUpCode;
 	string machineChoice;
+	int vectorSize = 0;
 
 	cout << "Please enter a start up code --> ";
 	cin >> startUpCode;
@@ -202,8 +196,10 @@ void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &ve
 
 	cout << "Initializing machines. Please wait ..." << endl;
 	initializeInventory(mainInventory);
-	initializeMachines(pMach, mainInventory, vectorSize);
+	initializeMachines(pMach, mainInventory);
 	cout << "Machines are ready." << endl;
+
+	vectorSize = pMach.size();
 
 	cout << "Available Machines: ";
 
@@ -225,13 +221,13 @@ void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &ve
 
 	while (machineChoice != "spring19")
 	{
-		int index = search(pMach, machineChoice, vectorSize);
+		int index = search(pMach, machineChoice);
 
 		while (index == -1 && machineChoice != "spring19")
 		{
 			cout << "Machine not found! Select machine --> ";
 			cin >> machineChoice;
-			index = search(pMach, machineChoice, vectorSize);
+			index = search(pMach, machineChoice);
 		}
 
 		if (index != -1)
@@ -240,16 +236,15 @@ void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory, int &ve
 			cout << "Select machine --> ";
 			cin >> machineChoice;
 		}
-
 	}
 }
 
-int search(vector<Machine *> pMach, string key, int vectorSize)
+int search(vector<Machine *> pMach, string key)
 {
 	int i = 0;
 	int pos = -1;
 	bool found = false;
-	while (!found && i < vectorSize)
+	while (!found && i < pMach.size())
 	{
 		if (pMach[i]->getName() == key)
 		{
@@ -262,10 +257,10 @@ int search(vector<Machine *> pMach, string key, int vectorSize)
 	return pos;
 }
 
-void printReport(const vector <Machine*> pMach, int vectorSize)
+void printReport(const vector <Machine*> pMach)
 {
 	cout << "Report is generating ..." << endl;
-	for (int i = 0; i < vectorSize; i++)
+	for (int i = 0; i < pMach.size(); i++)
 	{
 		pMach[i]->print("machinesOutput.txt");
 	}
