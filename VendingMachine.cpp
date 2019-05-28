@@ -26,13 +26,15 @@ void initializeInventory(Inventory &inv);
 void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory);
 int search(vector<Machine *> pMach, string key);
 void printReport(const vector<Machine *> pMach);
+void shutdownSystem(vector <Machine*> &pMach);
 
 int main()
 {
 	Inventory mainInventory; //contains all the available products
-	vector<Machine *> pMach; //contains all the machines
+	vector<Machine *> pMach; //contains pointers to all machines
 	initializeSystem(pMach, mainInventory);
 	printReport(pMach);
+	shutdownSystem(pMach);
 
 	return 0;
 }
@@ -264,5 +266,14 @@ void printReport(const vector <Machine*> pMach)
 	{
 		pMach[i]->print("machinesOutput.txt");
 	}
+}
+
+void shutdownSystem(vector <Machine*> &pMach)
+{
 	cout << "System is shutting down." << endl;
+	for (auto p : pMach)
+	{
+		delete p;
+	}
+	pMach.clear();
 }
