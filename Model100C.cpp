@@ -54,7 +54,7 @@ bool Model100C::payment(int cost)
 		}
 
 		sum *= 9;
-		check = to_string(sum);
+		string check = to_string(sum);
 
 		if (check[check.length() - 1] - 48 == CreditCard[0])
 		{
