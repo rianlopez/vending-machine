@@ -127,9 +127,7 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory)
 				{
 					string code;
 					Item oneItem;
-					int available = 0;
 					int id = 0, quantity = 0;
-					int i = 0;
 					getline(machineFile, oneLine);
 					machineStream.clear();
 					machineStream.str(oneLine);
