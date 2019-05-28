@@ -11,16 +11,15 @@ void Model100C::printPaymentType() const
 
 bool Model100C::payment(int cost)
 {
-	bool valid = false;
-	int CreditCard[16] = {0};
-
 	if (cost > 0)
 	{
 		int attemptCount = 0;
-		string input;
 
 		do
 		{
+			bool valid = false;
+			int CreditCard[16] = {0};
+			string input;
 			cout << "Enter your credit card number --> ";
 			cin.clear();
 			getline(cin, input);
