@@ -18,6 +18,7 @@
 #include "Model100A.h"
 #include "Model100B.h"
 #include "Model100C.h"
+#include "Model100D.h"
 
 using namespace std;
 
@@ -107,7 +108,15 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory)
 
 				index++;
 			}
-			else
+			else if (model == "100D")
+			{
+				knownModel = true;
+				pMach.push_back(new Model100D(quarters,dimes,nickels));
+				pMach[index]->setName("100D" + to_string(j));
+
+				index++;
+			}
+			else 
 			{
 				knownModel = false;
 			}
@@ -230,6 +239,7 @@ void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory)
 			cout << "Machine not found! Select machine --> ";
 			cin >> machineChoice;
 			index = search(pMach, machineChoice);
+			cin.clear();
 		}
 
 		if (index != -1)
