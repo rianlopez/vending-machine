@@ -23,7 +23,8 @@ bool Model100C::payment(int cost)
 			cout << "Enter your credit card number --> ";
 			cin.clear();
 			getline(cin, input);
-
+		if (input.length() >= 13 && input.length() <= 16)
+		{
 			// credit card validation
 		for (int i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
 		{
@@ -70,6 +71,12 @@ bool Model100C::payment(int cost)
 				attemptCount++;
 				cout << "Invalid credit card number was entered." << endl;
 			}
+		}
+		else
+		{
+			attemptCount++;
+			cout << "Invalid credit card number was entered." << endl;
+		}
 
 		} while (!valid && attemptCount < 2);
 
