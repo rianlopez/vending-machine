@@ -20,6 +20,7 @@ bool Model100D::payment(int cost)
 	{
 		do
 		{
+		
 			cout << "Select an option (1 - dollar bill, 2 - coins, 3 credit card) --> ";
 			cin >> option;
 
@@ -33,11 +34,6 @@ bool Model100D::payment(int cost)
 		else if (option == 2)
 			cout << "Please insert your coins --> ";
 
-		string input;
-		cin.ignore();
-		getline(cin, input);
-		istringstream inString(input); //string to first store value
-		//cin.clear();
 		int dollarCount = 0;
 		int quarterCount = 0;
 		int dimeCount = 0;
@@ -47,6 +43,11 @@ bool Model100D::payment(int cost)
 
 		if (option == 1 || option == 2)
 		{
+			string input; //line store money
+			cin.ignore();
+			getline(cin, input);
+			istringstream inString(input); //string to first store value
+
 			while (inString >> value && value != 0)
 			{
 				if (option == 1 && value == 100)
@@ -162,25 +163,26 @@ bool Model100D::payment(int cost)
 					cout << "Insufficient funds!" << endl;
 
 				if (valid)
-					cout << "Thank you! Please take your item." << endl;
+					cout << "Thank you! Please take your item." << endl << endl;
 				else
 				{
 					cout << "Your transaction cannot be processed." << endl;
 
 					if (option == 1)
-						cout << "Please take back your dollar bill." << endl;
+						cout << "Please take back your dollar bill." << endl << endl;
 					else if (option == 2)
 					{
 						quarter -= quarterCount;
 						dime -= dimeCount;
 						nickel -= nickelCount;
 
-						cout << "Please take back your coins." << endl;
+						cout << "Please take back your coins." << endl << endl;
 					}
 
 				}
+				
 			}
-			else if (amount < 0)
+			else
 			{
 				cout << "You chose to cancel your selection." << endl;
 			}
@@ -194,6 +196,7 @@ bool Model100D::payment(int cost)
 				string cardNumber;
 				cout << "Enter your credit card number --> ";
 				cin >> cardNumber;
+				
 
 				for (int i = 0, j = cardNumber.length() - 1; i < cardNumber.length(), j >= 0; i++, j--)
 				{
@@ -223,7 +226,7 @@ bool Model100D::payment(int cost)
 				sum *= 9;
 				string check = to_string(sum);
 
-				if (check[check.length() - 1] - 48 == CreditCard[0])
+				if (check[check.length() - 1] - 48 == CreditCard[0] && check != "0")
 				{
 					valid = true;
 				}
@@ -236,6 +239,7 @@ bool Model100D::payment(int cost)
 					cout << "Invalid credit card number was entered." << endl;
 					attemptCount++;
 				}
+
 			} while (!valid && attemptCount < 2);
 
 			if (valid)
@@ -244,9 +248,9 @@ bool Model100D::payment(int cost)
 					<< "Your credit card was successfully charged for $" << cost / 100.0 << "." << endl
 					<< "Thank you! Please take your item." << endl << endl;
 			}
-			else if (!valid && attemptCount > 2)
+			else if (!valid && attemptCount >= 2)
 			{
-				cout << "Too many invalid attempts. Your selection is cancelled." << endl;
+				cout << "Too many invalid attempts. Your selection is cancelled." << endl << endl;
 			}
 		}
 	}
