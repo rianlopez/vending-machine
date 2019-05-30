@@ -130,6 +130,7 @@ Item Inventory::getItem(int id, int qty)
 		if (pItem[i].qty < qty)
 		{
 			temp = pItem[i];
+			temp.initQty = temp.qty = pItem[i].qty;
 			pItem[i].qty = 0;
 		}
 		else
