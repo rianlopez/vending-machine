@@ -11,21 +11,34 @@ void Model100C::printPaymentType() const
 
 bool Model100C::payment(int cost)
 {
-	bool valid = false;
 	if (cost > 0)
 	{
+		bool valid = false;
 		int attemptCount = 0;
-
 		do
 		{
 			int CreditCard[16] = {0};
 			string input;
 			cout << "Enter your credit card number --> ";
 			cin.clear();
+			cin.ignore();
 			getline(cin, input);
 		if (input.length() >= 13 && input.length() <= 16)
 		{
-			// credit card validation
+			const string num = "1234567890";
+			int count = 0;
+			for (int i = 0; i < input.length(); i++)
+			{
+				for (int j = 0; j < 10; j++)
+				{
+					if (input[i] == num[j])
+					{
+						count++;
+					}
+				}
+			}
+			if (count == input.length())
+			{
 		for (int i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
 		{
 			CreditCard[j] = input[i] - 48;
@@ -67,6 +80,12 @@ bool Model100C::payment(int cost)
 		}
 
 			if (!valid)
+			{
+				attemptCount++;
+				cout << "Invalid credit card number was entered." << endl;
+			}
+		}
+			else
 			{
 				attemptCount++;
 				cout << "Invalid credit card number was entered." << endl;
