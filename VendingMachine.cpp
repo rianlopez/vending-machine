@@ -19,6 +19,7 @@
 #include "Model100B.h"
 #include "Model100C.h"
 #include "Model100D.h"
+#include <stdlib.h>
 
 using namespace std;
 
@@ -59,8 +60,8 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory)
 
 	if (!machineFile)
 	{
-		cout << "Error: Unable to open machine.txt";
-		return;
+		cout << "Error: Unable to open machine.txt" << endl;
+		exit(EXIT_FAILURE);
 	}
 
 	istringstream machineStream;
@@ -127,13 +128,17 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory)
 				{
 					string code;
 					Item oneItem;
+					int available = 0;
 					int id = 0, quantity = 0;
+					int i = 0;
 					getline(machineFile, oneLine);
 					machineStream.clear();
 					machineStream.str(oneLine);
 					machineStream >> code >> id >> quantity;
 
 					oneItem = mainInventory.getItem(id, quantity);
+
+					//try block
 
 					pMach[index - 1]->addProduct(code, oneItem);
 				}
@@ -161,8 +166,8 @@ void initializeInventory(Inventory &inv)
 
 	if (!productFile)
 	{
-		cout << "Error: Unable to open products.txt";
-		return;
+		cout << "Error: Unable to open products.txt" << endl;
+		exit(EXIT_FAILURE);
 	}
 	while (!productFile.eof())
 	{
@@ -234,7 +239,7 @@ void initializeSystem(vector<Machine*> &pMach, Inventory &mainInventory)
 
 		while (index == -1 && machineChoice != "spring19")
 		{
-			cout << "Machine not found! Select machine --> ";
+			cout << "Machine not found! " << endl << "Select machine --> ";
 			cin >> machineChoice;
 			index = search(pMach, machineChoice);
 			cin.clear();
