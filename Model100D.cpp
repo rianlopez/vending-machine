@@ -24,15 +24,15 @@ bool Model100D::payment(int cost)
 			cout << "Select an option (1 - dollar bill, 2 - coins, 3 credit card) --> ";
 			cin >> option;
 
-			if (option != 1 && option != 2 && option != 3)
+			if (option != '1' && option != '2' && option != '3')
 				cerr << "Error: Invalid option. Please try again." << endl;
 
 
-		} while (option != 1 && option != 2 && option != 3);
+		} while (option != '1' && option != '2' && option != '3');
 
-		if (option == 1)
+		if (option == '1')
 			cout << "Insert your money --> ";
-		else if (option == 2)
+		else if (option == '2')
 			cout << "Please insert your coins --> ";
 
 		int dollarCount = 0;
@@ -42,7 +42,7 @@ bool Model100D::payment(int cost)
 		int amount = 0;
 		int value; // amount of money input
 
-		if (option == 1 || option == 2)
+		if (option == '1' || option == '2')
 		{
 			string input; //line store money
 			cin.ignore();
@@ -51,12 +51,12 @@ bool Model100D::payment(int cost)
 
 			while (inString >> value && value != 0)
 			{
-				if (option == 1 && value == 100)
+				if (option == '1' && value == 100)
 				{
 					amount += value;
 					dollarCount++;
 				}
-				else if (option == 2)
+				else if (option == '2')
 				{
 					if (value == 25)
 					{
@@ -79,7 +79,7 @@ bool Model100D::payment(int cost)
 				}
 			}
 
-			if (amount > 0 && option != 3)
+			if (amount > 0 && option != '3')
 			{
 				cout << "You entered an amount of " << amount << " cents." << endl
 					<< "Processing your purchase ..." << endl;
@@ -169,9 +169,9 @@ bool Model100D::payment(int cost)
 				{
 					cout << "Your transaction cannot be processed." << endl;
 
-					if (option == 1)
+					if (option == '1')
 						cout << "Please take back your dollar bill." << endl << endl;
-					else if (option == 2)
+					else if (option == '2')
 					{
 						quarter -= quarterCount;
 						dime -= dimeCount;
@@ -188,7 +188,7 @@ bool Model100D::payment(int cost)
 				cout << "You chose to cancel your selection." << endl;
 			}
 		}
-		else if (option == 3)
+		else if (option == '3')
 		{
 			int attemptCount = 0;
 			do
