@@ -11,91 +11,91 @@ void Model100C::printPaymentType() const
 
 bool Model100C::payment(int cost)
 {
+	bool valid = false;
+
 	if (cost > 0)
 	{
-		bool valid = false;
 		int attemptCount = 0;
 		do
 		{
-			int CreditCard[16] = {0};
+			int CreditCard[16] = { 0 };
 			string input;
 			cout << "Enter your credit card number --> ";
-			cin.clear();
-			cin.ignore();
-			getline(cin, input);
-		if (input.length() >= 13 && input.length() <= 16)
-		{
-			const string num = "1234567890";
-			int count = 0;
-			for (int i = 0; i < input.length(); i++)
+			cin >> input;
+
+			if (input.length() >= 13 && input.length() <= 16)
 			{
-				for (int j = 0; j < 10; j++)
+				const string num = "1234567890";
+				int count = 0;
+				for (int i = 0; i < input.length(); i++)
 				{
-					if (input[i] == num[j])
+					for (int j = 0; j < 10; j++)
 					{
-						count++;
+						if (input[i] == num[j])
+						{
+							count++;
+						}
 					}
 				}
-			}
-			if (count == input.length())
-			{
-		for (int i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
-		{
-			CreditCard[j] = input[i] - 48;
-		}
+				if (count == input.length())
+				{
+					for (int i = 0, j = input.length() - 1; i < input.length(), j >= 0; i++, j--)
+					{
+						CreditCard[j] = input[i] - 48;
+					}
 
-		int sum = 0;
-		for (int i = 1; i < input.length(); i++)
-		{
-			if (i % 2 == 0)
-			{
+					int sum = 0;
+					for (int i = 1; i < input.length(); i++)
+					{
+						if (i % 2 == 0)
+						{
 
+						}
+						else
+						{
+							CreditCard[i] *= 2;
+						}
+						if (CreditCard[i] >= 10)
+						{
+							CreditCard[i] -= 9;
+						}
+						sum = sum + CreditCard[i];
+					}
+
+					if (sum % 10 == CreditCard[0])
+					{
+						valid = true;
+					}
+
+					sum *= 9;
+					string check = to_string(sum);
+
+					if (check[check.length() - 1] - 48 == CreditCard[0])
+					{
+						valid = true;
+					}
+					else
+					{
+						valid = false;
+					}
+
+					if (!valid)
+					{
+						attemptCount++;
+						cout << "Invalid credit card number was entered." << endl;
+					}
+				}
+				else
+				{
+					attemptCount++;
+					cout << "Invalid credit card number was entered." << endl;
+				}
 			}
 			else
-			{
-				CreditCard[i] *= 2;
-			}
-			if (CreditCard[i] >= 10)
-			{
-				CreditCard[i] -= 9;
-			}
-			sum = sum + CreditCard[i];
-		}
-
-		if (sum % 10 == CreditCard[0])
-		{
-			valid = true;
-		}
-
-		sum *= 9;
-		string check = to_string(sum);
-
-		if (check[check.length() - 1] - 48 == CreditCard[0])
-		{
-			valid = true;
-		}
-		else
-		{
-			valid = false;
-		}
-
-			if (!valid)
 			{
 				attemptCount++;
 				cout << "Invalid credit card number was entered." << endl;
 			}
-		}
-			else
-			{
-				attemptCount++;
-				cout << "Invalid credit card number was entered." << endl;
-			}
-		}
-		else
-		{
-			attemptCount++;
-			cout << "Invalid credit card number was entered." << endl;
-		}
 
 		} while (!valid && attemptCount < 2);
 
