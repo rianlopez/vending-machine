@@ -15,19 +15,19 @@ bool Model100B::payment(int cost)
 
 	if (cost > 0 && cost % 5 == 0)
 	{
-		int option;
+		char option;
 
 		do
 		{
 			cout << "Select an option (1 - dollar bill and 2 - coins) --> ";
 			cin >> option;
 
-			if (option != 1 && option != 2)
+			if (option != '1' && option != '2')
 				cerr << "Error: Invalid option. Please try again." << endl;
 
-		} while (option != 1 && option != 2);
+		} while (option != '1' && option != '2');
 
-		if (option == 1)
+		if (option == '1')
 			cout << "Insert your money --> ";
 		else
 			cout << "Please insert your coins --> ";
@@ -45,12 +45,12 @@ bool Model100B::payment(int cost)
 
 		while (inString >> value && value != 0)
 		{
-			if (option == 1 && value == 100)
+			if (option == '1' && value == 100)
 			{
 				amount += value;
 				dollarCount++;
 			}
-			else if (option == 2)
+			else if (option == '2')
 			{
 				if (value == 25)
 				{
@@ -163,7 +163,7 @@ bool Model100B::payment(int cost)
 			{
 				cout << "Your transaction cannot be processed." << endl;
 
-				if (option == 1)
+				if (option == '1')
 					cout << "Please take back your dollar bill." << endl;
 				else
 				{
