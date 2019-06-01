@@ -136,9 +136,14 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory)
 					machineStream.str(oneLine);
 					machineStream >> code >> id >> quantity;
 
-					oneItem = mainInventory.getItem(id, quantity);
-
-					//try block
+					try {
+						oneItem = mainInventory.getItem(id, quantity);
+					}
+					catch (string x)
+					{
+						cerr << x << endl;
+						exit(EXIT_FAILURE);
+					}
 
 					pMach[index - 1]->addProduct(code, oneItem);
 				}
