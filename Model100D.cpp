@@ -14,7 +14,7 @@ bool Model100D::payment(int cost)
 {
 
 	bool valid = false;
-	int option;
+	char option;
 
 	if (cost > 0 && cost % 5 == 0)
 	{
@@ -26,6 +26,7 @@ bool Model100D::payment(int cost)
 
 			if (option != 1 && option != 2 && option != 3)
 				cerr << "Error: Invalid option. Please try again." << endl;
+
 
 		} while (option != 1 && option != 2 && option != 3);
 
@@ -197,47 +198,54 @@ bool Model100D::payment(int cost)
 				cout << "Enter your credit card number --> ";
 				cin >> cardNumber;
 				
-
-				for (int i = 0, j = cardNumber.length() - 1; i < cardNumber.length(), j >= 0; i++, j--)
+				if (cardNumber.length() >= 13 && cardNumber.length() < 16)
 				{
-					CreditCard[j] = cardNumber[i] - 48;
-				}
+					for (int i = 0, j = cardNumber.length() - 1; i < cardNumber.length(), j >= 0; i++, j--)
+					{
+						CreditCard[j] = cardNumber[i] - 48;
+					}
 
-				int sum = 0;
-				for (int i = 1; i < cardNumber.length(); i++)
-				{
-					if (i % 2 == 0) {}
+					int sum = 0;
+					for (int i = 1; i < cardNumber.length(); i++)
+					{
+						if (i % 2 == 0) {}
+						else
+						{
+							CreditCard[i] *= 2;
+						}
+						if (CreditCard[i] >= 10)
+						{
+							CreditCard[i] -= 9;
+						}
+						sum = sum + CreditCard[i];
+					}
+
+					if (sum % 10 == CreditCard[0])
+					{
+						valid = true;
+					}
+
+					sum *= 9;
+					string check = to_string(sum);
+
+					if (check[check.length() - 1] - 48 == CreditCard[0] && check != "0")
+					{
+						valid = true;
+					}
 					else
 					{
-						CreditCard[i] *= 2;
+						valid = false;
 					}
-					if (CreditCard[i] >= 10)
+					if (!valid)
 					{
-						CreditCard[i] -= 9;
+						cout << "Invalid credit card number was entered." << endl;
+						attemptCount++;
 					}
-					sum = sum + CreditCard[i];
-				}
-
-				if (sum % 10 == CreditCard[0])
-				{
-					valid = true;
-				}
-
-				sum *= 9;
-				string check = to_string(sum);
-
-				if (check[check.length() - 1] - 48 == CreditCard[0] && check != "0")
-				{
-					valid = true;
 				}
 				else
 				{
-					valid = false;
-				}
-				if (!valid)
-				{
-					cout << "Invalid credit card number was entered." << endl;
 					attemptCount++;
+					cout << "Invalid credit card number was entered." << endl;
 				}
 
 			} while (!valid && attemptCount < 2);
