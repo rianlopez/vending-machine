@@ -1,10 +1,10 @@
 /*  Program: VendingMachine.cpp
-	Author:
-	Class: CSCI 140
-	Date: 05/13/2019
-	Description: Main class
-	I certify that the code below is my own work.
-	Exception(s): N/A
+Author:
+Class: CSCI 140
+Date: 05/13/2019
+Description: Main class
+I certify that the code below is my own work.
+Exception(s): N/A
 */
 
 #include <iostream>
@@ -112,12 +112,12 @@ void initializeMachines(vector<Machine*> &pMach, Inventory &mainInventory)
 			else if (model == "100D")
 			{
 				knownModel = true;
-				pMach.push_back(new Model100D(quarters,dimes,nickels));
+				pMach.push_back(new Model100D(quarters, dimes, nickels));
 				pMach[index]->setName("100D" + to_string(j));
 
 				index++;
 			}
-			else 
+			else
 			{
 				knownModel = false;
 			}
@@ -280,10 +280,13 @@ int search(vector<Machine *> pMach, string key)
 void printReport(const vector <Machine*> pMach)
 {
 	cout << "Report is generating ..." << endl;
+
+	ofstream outFile("reports.txt");
+
 	for (int i = 0; i < pMach.size(); i++)
-	{
-		pMach[i]->print("machinesOutput.txt");
-	}
+		pMach[i]->print(outFile);
+
+	outFile.close();
 }
 
 void shutdownSystem(vector <Machine*> &pMach)
