@@ -9,7 +9,7 @@ class Inventory
 {
 private:
 	int size;
-	Item *pItem;
+	Item *pItem; // dynamic array of Item objects
 
 public:
 	Inventory();
@@ -20,7 +20,9 @@ public:
 	void addItem(const Item &);
 	void setItemList(const Item[], int size);
 	int getSize() const { return size; }
-	Item getItem(int id, int qty = 0);
+	Item getItem(int id, int qty = 0); // searches an Item object by id and if found,
+									   // returns the Item object with the available
+									   // quantity
 	Inventory &operator=(const Inventory &);
 	Item &operator[](int index) { return pItem[index]; }
 	const Item &operator[](int index) const { return pItem[index]; }
