@@ -1,10 +1,12 @@
-/*  Program: VendingMachine.cpp
-Author:
-Class: CSCI 140
-Date: 05/13/2019
-Description: Main class
-I certify that the code below is my own work.
-Exception(s): N/A
+/* Program: VendingMachine.cpp
+   Authors: Rian Lopez, Ariella Navarro, Joe Jen Choon
+   Class: CSCI 140 MW
+   Date: 6/3/2019
+   Description: Vending machine application.
+
+   We certify that the code below is our own work.
+
+       Exception(s): N/A
 */
 
 #include <iostream>
@@ -183,6 +185,7 @@ void initializeInventory(Inventory &inv)
 
 		productStream.str(oneItem);
 		productStream >> id >> quantity >> price;
+		productStream.ignore();
 		getline(productStream, description);
 
 		product.id = id;
