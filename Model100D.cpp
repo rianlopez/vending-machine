@@ -1,4 +1,3 @@
-
 // Implementation file of Model100D class
 
 #include "Model100D.h"
@@ -7,79 +6,86 @@ int Model100D::numOfModel100D = 0;
 
 void Model100D::printPaymentType() const
 {
-	cout << "This machine accepts coins or one-dollar bill." << endl;
+	cout << "This machine accepts coins, one-dollar bill, or credit card." << endl;
 }
 
 bool Model100D::payment(int cost)
 {
-
 	bool valid = false;
-	char option;
 
 	if (cost > 0 && cost % 5 == 0)
 	{
+		string option;
+
 		do
 		{
-		
-			cout << "Select an option (1 - dollar bill, 2 - coins, 3 credit card) --> ";
-			cin >> option;
+			cout << "Select an option (1 - dollar bill, 2 - coins, and 3 - credit card) --> ";
+			cin.clear();
+			cin.sync();
+			getline(cin, option);
 
-			if (option != '1' && option != '2' && option != '3')
+			if (option != "1" && option != "2" && option != "3")
 				cerr << "Error: Invalid option. Please try again." << endl;
 
 
-		} while (option != '1' && option != '2' && option != '3');
+		} while (option != "1" && option != "2" && option != "3");
 
-		if (option == '1')
+		if (option == "1")
 			cout << "Insert your money --> ";
-		else if (option == '2')
+		else if (option == "2")
 			cout << "Please insert your coins --> ";
 
-		int dollarCount = 0;
-		int quarterCount = 0;
-		int dimeCount = 0;
-		int nickelCount = 0;
-		int amount = 0;
-		int value; // amount of money input
-
-		if (option == '1' || option == '2')
+		if (option == "1" || option == "2")
 		{
 			string input; //line store money
-			cin.ignore();
+			cin.clear();
+			cin.sync();
 			getline(cin, input);
 			istringstream inString(input); //string to first store value
 
-			while (inString >> value && value != 0)
+			int dollarCount = 0;
+			int quarterCount = 0;
+			int dimeCount = 0;
+			int nickelCount = 0;
+			int amount = 0;
+			int value; // amount of money input
+
+			while (inString >> input && input != "0")
 			{
-				if (option == '1' && value == 100)
+				if (input.find_first_not_of("0123456789") == string::npos)
 				{
-					amount += value;
-					dollarCount++;
-				}
-				else if (option == '2')
-				{
-					if (value == 25)
+					value = stoi(input);
+
+					if (option == "1" && value == 100)
 					{
 						amount += value;
-						quarterCount++;
-						quarter++;
+						dollarCount++;
 					}
-					else if (value == 10)
+					else if (option == "2")
 					{
-						amount += value;
-						dimeCount++;
-						dime++;
-					}
-					else if (value == 5)
-					{
-						amount += value;
-						nickelCount++;
-						nickel++;
+						if (value == 25)
+						{
+							amount += value;
+							quarterCount++;
+							quarter++;
+						}
+						else if (value == 10)
+						{
+							amount += value;
+							dimeCount++;
+							dime++;
+						}
+						else if (value == 5)
+						{
+							amount += value;
+							nickelCount++;
+							nickel++;
+						}
 					}
 				}
 			}
 
-			if (amount > 0 && option != '3')
+			if (amount > 0)
 			{
 				cout << "You entered an amount of " << amount << " cents." << endl
 					<< "Processing your purchase ..." << endl;
@@ -164,41 +170,44 @@ bool Model100D::payment(int cost)
 					cout << "Insufficient funds!" << endl;
 
 				if (valid)
-					cout << "Thank you! Please take your item." << endl << endl;
+					cout << "Thank you! Please take your item." << endl;
 				else
 				{
 					cout << "Your transaction cannot be processed." << endl;
 
-					if (option == '1')
-						cout << "Please take back your dollar bill." << endl << endl;
-					else if (option == '2')
+					if (option == "1")
+						cout << "Please take back your dollar bill." << endl;
+					else
 					{
 						quarter -= quarterCount;
 						dime -= dimeCount;
 						nickel -= nickelCount;
 
-						cout << "Please take back your coins." << endl << endl;
+						cout << "Please take back your coins." << endl;
 					}
 
 				}
-				
+
 			}
 			else
 			{
 				cout << "You chose to cancel your selection." << endl;
 			}
 		}
-		else if (option == '3')
+		else
 		{
 			int attemptCount = 0;
 			do
 			{
 				int CreditCard[16] = { 0 };
-				string cardNumber;
+
 				cout << "Enter your credit card number --> ";
-				cin >> cardNumber;
-				
-				if (cardNumber.length() >= 13 && cardNumber.length() < 16)
+				string cardNumber;
+				cin.clear();
+				cin.sync();
+				getline(cin, cardNumber);
+
+				if (cardNumber.length() >= 13 && cardNumber.length() <= 16)
 				{
 					for (int i = 0, j = cardNumber.length() - 1; i < cardNumber.length(), j >= 0; i++, j--)
 					{
@@ -228,7 +237,7 @@ bool Model100D::payment(int cost)
 					sum *= 9;
 					string check = to_string(sum);
 
-					if (check[check.length() - 1] - 48 == CreditCard[0] && check != "0")
+					if (check[check.length() - 1] - 48 == CreditCard[0])
 					{
 						valid = true;
 					}
@@ -253,15 +262,16 @@ bool Model100D::payment(int cost)
 			if (valid)
 			{
 				cout << fixed << showpoint << setprecision(2)
-					<< "Your credit card was successfully charged for $" << cost / 100.0 << "." << endl
-					<< "Thank you! Please take your item." << endl << endl;
+					<< "Your credit card was successfully charged for $" << cost / 100.00 << "." << endl
+					<< "Thank you! Please take your item." << endl;
 			}
-			else if (!valid && attemptCount >= 2)
-			{
-				cout << "Too many invalid attempts. Your selection is cancelled." << endl << endl;
-			}
+			else
+				cout << "Too many invalid attempts. Your selection is cancelled." << endl;
 		}
+
+		cout << endl;
 	}
+
 	return valid;
 }
 
