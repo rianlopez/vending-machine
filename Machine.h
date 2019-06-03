@@ -33,7 +33,7 @@ protected:
 	int purchaseCount; // number of valid transactions
     int productCount;
 	string name;
-	string *pStr;
+	string *pStr;	   // dynamic array of string objects that holds a code for each product
 	Inventory products;
 
 	virtual void printPaymentType() const = 0;
@@ -58,9 +58,6 @@ public:
 	void purchase();
 	void print(ofstream &outFile) const;
 	void print(const string &fileName) const;
-	int getQuarter() const { return quarter; }
-	int getDime() const { return dime; }
-	int getNickel() const { return nickel; }
 	string getName() const { return name; }
 	Machine &operator=(const Machine &);
 
