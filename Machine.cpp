@@ -15,7 +15,7 @@ Machine::Machine(int q, int d, int n)
 	initQuarter = quarter = q;
 	initDime = dime = d;
 	initNickel = nickel = n;
-	balance = dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL;
+	balance = quarter * QUARTER + dime * DIME + nickel * NICKEL;
 	purchaseCount = 0;
 	productCount = 0;
 	name = "";
@@ -28,7 +28,7 @@ Machine::Machine(const string &s)
 	initQuarter = quarter = 0;
 	initDime = dime = 0;
 	initNickel = nickel = 0;
-	balance = dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL;
+	balance = 0;
 	purchaseCount = 0;
 	productCount = 0;
 	name = s;
@@ -45,12 +45,12 @@ Machine::Machine(const Machine &a)
 	quarter = a.quarter;
 	dime = a.dime;
 	nickel = a.nickel;
-	balance = dollar * DOLLAR + quarter * QUARTER + dime * DIME + nickel * NICKEL;
+	balance = a.balance;
 	purchaseCount = a.purchaseCount;
 	productCount = a.productCount;
 	name = a.name;
 	products = a.products;
-	
+
 	if (productCount > 0)
 	{
 		pStr = new string[productCount];
@@ -193,11 +193,13 @@ void Machine::purchase()
 	int pos;
 	bool valid = false;
 
+	cin.ignore();
+
 	do
 	{
 		cout << "Select an item --> ";
 		string code;
-		cin >> code;
+		getline(cin, code);
 
 		int i = 0;
 		bool found = false;
@@ -214,7 +216,12 @@ void Machine::purchase()
 		}
 
 		if (!found || products[pos].qty == 0)
+		{
+			cin.clear();
+			cin.sync();
+
 			cerr << "Error: Invalid option. Please try again." << endl;
+		}
 		else
 			valid = true;
 
@@ -242,8 +249,8 @@ void Machine::print(ofstream &outFile) const
 		<< "Initial balance: $" << initBalance;
 	outFile << " (" << initDollar << " $, " << initQuarter << " Q, "
 		<< initDime << " D, " << initNickel << " N)" << endl
-		<< "Number of valid transactions: " << purchaseCount << endl;
-	outFile << fixed << showpoint << setprecision(2)
+		<< "Number of valid transactions: " << purchaseCount << endl
+		<< fixed << showpoint << setprecision(2)
 		<< "Total cost: $" << cost << endl
 		<< "Current balance: $" << currBalance;
 	outFile << " (" << dollar << " $, " << quarter << " Q, "
@@ -265,8 +272,7 @@ void Machine::print(ofstream &outFile) const
 
 void Machine::print(const string &fileName) const
 {
-	ofstream outFile;
-	outFile.open(fileName, ios::app);
+	ofstream outFile(fileName, ios::app);
 
 	print(outFile);
 
@@ -294,13 +300,11 @@ Machine &Machine::operator=(const Machine &r)
 		{
 			productCount = r.productCount;
 
-			if (productCount > 0)
-			{
-				if (pStr != nullptr)
-					delete[] pStr;
+			if (pStr != nullptr)
+				delete[] pStr;
 
+			if (productCount > 0)
 				pStr = new string[productCount];
-			}
 			else
 				pStr = nullptr;
 		}

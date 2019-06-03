@@ -10,18 +10,18 @@ Inventory::Inventory()
 
 Inventory::Inventory(const Item a[], int size)
 {
-	if (size <= 0)
-	{
-		this->size = 0;
-		pItem = nullptr;
-	}
-	else
+	if (size > 0)
 	{
 		this->size = size;
 		pItem = new Item[size];
 
 		for (int i = 0; i < size; i++)
 			pItem[i] = a[i];
+	}
+	else
+	{
+		this->size = 0;
+		pItem = nullptr;
 	}
 }
 
@@ -130,7 +130,7 @@ Item Inventory::getItem(int id, int qty)
 		if (pItem[i].qty < qty)
 		{
 			temp = pItem[i];
-			temp.initQty = temp.qty = pItem[i].qty;
+			temp.initQty = pItem[i].qty;
 			pItem[i].qty = 0;
 		}
 		else
@@ -154,13 +154,11 @@ Inventory &Inventory::operator=(const Inventory &a)
         {
             size = a.size;
 
-			if (size > 0)
-			{
-				if (pItem != nullptr)
-					delete[] pItem;
+			if (pItem != nullptr)
+				delete[] pItem;
 
+			if (size > 0)
 				pItem = new Item[size];
-			}
 			else
 				pItem = nullptr;
         }
