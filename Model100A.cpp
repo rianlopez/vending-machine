@@ -1,4 +1,4 @@
-// Implementation file of Model 100A class
+// Implementation file of Model100A class
 
 #include "Model100A.h"
 
@@ -16,21 +16,27 @@ bool Model100A::payment(int cost)
 	if (cost > 0 && cost % 5 == 0)
 	{
 		cout << "Insert your money --> ";
-
 		string input;
-		cin.ignore();
+		cin.clear();
+		cin.sync();
 		getline(cin, input);
 		istringstream inString(input);
+
 		int dollarCount = 0;
 		int amount = 0;
 		int value;
 
-		while (inString >> value && value != 0)
+		while (inString >> input && input != "0")
 		{
-			if (value == 100)
+			if (input.find_first_not_of("0123456789") == string::npos)
 			{
-				amount += value;
-				dollarCount++;
+				value = stoi(input);
+
+				if (value == 100)
+				{
+					amount += value;
+					dollarCount++;
+				}
 			}
 		}
 

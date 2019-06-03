@@ -15,27 +15,31 @@ bool Model100B::payment(int cost)
 
 	if (cost > 0 && cost % 5 == 0)
 	{
-		char option;
+		string option;
 
 		do
 		{
 			cout << "Select an option (1 - dollar bill and 2 - coins) --> ";
-			cin >> option;
+			cin.clear();
+			cin.sync();
+			getline(cin, option);
 
-			if (option != '1' && option != '2')
+			if (option != "1" && option != "2")
 				cerr << "Error: Invalid option. Please try again." << endl;
 
-		} while (option != '1' && option != '2');
+		} while (option != "1" && option != "2");
 
-		if (option == '1')
+		if (option == "1")
 			cout << "Insert your money --> ";
 		else
 			cout << "Please insert your coins --> ";
 
 		string input;
-		cin.ignore();
+		cin.clear();
+		cin.sync();
 		getline(cin, input);
 		istringstream inString(input);
+
 		int dollarCount = 0;
 		int quarterCount = 0;
 		int dimeCount = 0;
@@ -43,32 +47,37 @@ bool Model100B::payment(int cost)
 		int amount = 0;
 		int value;
 
-		while (inString >> value && value != 0)
+		while (inString >> input && input != "0")
 		{
-			if (option == '1' && value == 100)
+			if (input.find_first_not_of("0123456789") == string::npos)
 			{
-				amount += value;
-				dollarCount++;
-			}
-			else if (option == '2')
-			{
-				if (value == 25)
+				value = stoi(input);
+
+				if (option == "1" && value == 100)
 				{
 					amount += value;
-					quarterCount++;
-					quarter++;
+					dollarCount++;
 				}
-				else if (value == 10)
+				else if (option == "2")
 				{
-					amount += value;
-					dimeCount++;
-					dime++;
-				}
-				else if (value == 5)
-				{
-					amount += value;
-					nickelCount++;
-					nickel++;
+					if (value == 25)
+					{
+						amount += value;
+						quarterCount++;
+						quarter++;
+					}
+					else if (value == 10)
+					{
+						amount += value;
+						dimeCount++;
+						dime++;
+					}
+					else if (value == 5)
+					{
+						amount += value;
+						nickelCount++;
+						nickel++;
+					}
 				}
 			}
 		}
@@ -163,7 +172,7 @@ bool Model100B::payment(int cost)
 			{
 				cout << "Your transaction cannot be processed." << endl;
 
-				if (option == '1')
+				if (option == "1")
 					cout << "Please take back your dollar bill." << endl;
 				else
 				{

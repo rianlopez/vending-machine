@@ -16,12 +16,16 @@ bool Model100C::payment(int cost)
 	if (cost > 0)
 	{
 		int attemptCount = 0;
+
 		do
 		{
 			int CreditCard[16] = { 0 };
-			string input;
+
 			cout << "Enter your credit card number --> ";
-			cin >> input;
+			string input;
+			cin.clear();
+			cin.sync();
+			getline(cin, input);
 
 			if (input.length() >= 13 && input.length() <= 16)
 			{
